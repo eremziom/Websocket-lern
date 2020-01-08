@@ -10,11 +10,12 @@ let userName = '';
 const socket = io();
 
 //listener
-socket.on('message', (event) => addMessage(event.author, event.content))
+socket.on('message', (event) => addMessage(event.author, event.content));
+socket.on('join', (user) => addMessage('Server', `<i><b>${user}</b> has just logged in</i>`));
+socket.on('leave', (user) => addMessage('Server', `<i><b>${user}</b> has just left</i>`))
 
 login = (event) => {
   event.preventDefault();
-  console.log('klik');
   if(!userNameInput.value){
     alert('enter username');
   }
@@ -24,7 +25,6 @@ login = (event) => {
     loginForm.classList.remove('show');
     messagesSection.classList.add('show');
   }
-  console.log('username: ', userName);
 }
 
 addMessage = (author, content) => {

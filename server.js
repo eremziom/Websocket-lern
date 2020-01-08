@@ -22,25 +22,22 @@ const io = socket(server);
 io.on('connection', (socket) => {
   console.log('New client! Its id – ' + socket.id);
   socket.on('message', (message) => {
-    console.log('Oh, I\'ve got something from ' + socket.id);
     messages.push(message);
     socket.broadcast.emit('message', message);
   });
   socket.on('login', (user) => {
     const userObject = {user: user, id: socket.id};
     users.push(userObject);
-    console.log(users);
+    socket.broadcast.emit('join', user);
   });
   socket.on('disconnect', () => { 
-    console.log('Oh, socket ' + socket.id + ' has left') 
+    console.log('Oh, client ' + socket.id + ' has left') 
     for(let activeUser of users){
       if(activeUser.id == socket.id){
-        console.log('activeUser: ', activeUser, ' activeUserID: ', activeUser.id, socket.id)
         const index = users.indexOf(activeUser);
         users.splice(index);
+        socket.broadcast.emit('leave', activeUser.user);
       }
     }
-    console.log(users);
   });
-  console.log('I\'ve added a listener on message and disconnect events \n');
 });
