@@ -7,6 +7,11 @@ const messageContentInput = document.getElementById('message-content');
 
 let userName = '';
 
+const socket = io();
+
+//listener
+socket.on('message', (event) => addMessage(event.author, event.content))
+
 login = (event) => {
   event.preventDefault();
   console.log('klik');
@@ -41,6 +46,7 @@ sendMessage = (event) => {
   }
   else {
     addMessage(userName, messageContentInput.value)
+    socket.emit('message', { author: userName, content: messageContentInput.value })
     messageContentInput.value = '';
   }
 }
