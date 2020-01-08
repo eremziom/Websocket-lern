@@ -20,6 +20,7 @@ login = (event) => {
   }
   else{
     userName = userNameInput.value;
+    socket.emit('login',  userName )
     loginForm.classList.remove('show');
     messagesSection.classList.add('show');
   }
